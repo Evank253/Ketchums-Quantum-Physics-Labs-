@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ketchums Labs - Quantara Dashboard</title>
+    <style>
+        /* Modern, minimal cyberpunk visual theme */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ffcc;
+        }
+
+        /* Full screen container for your 3D particle swarm */
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Overlay text panels for system feedback */
+        .dashboard-ui {
+            position: absolute;
+            z-index: 10;
+            padding: 20px;
+            pointer-events: none; /* Allows user interactions to pass straight to the 3D map */
+        }
+
+        .top-left { top: 0; left: 0; }
+        .top-right { top: 0; right: 0; text-align: right; }
+
+        h1 { margin: 0 0 5px 0; font-size: 1.2rem; letter-spacing: 2px; color: #ffffff; }
+        p { margin: 0; font-size: 0.8rem; color: #888888; }
+        .status-active { color: #00ffcc; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- 3D Particle Render Target -->
+    <div id="canvas-container"></div>
+
+    <!-- Interface Dashboard Overlays -->
+    <div class="dashboard-ui top-left">
+        <h1>KETCHUMS QUANTUM PHYSICS LABS</h1>
+        <p>Engine Status: <span class="status-active">POWERED BY QUANTARA</span></p>
+    </div>
+
+    <div class="dashboard-ui top-right">
+        <h1>SWARM SECURITY OVERVIEW</h1>
+        <p id="token-display">Wallet: Unconnected | Balance: 0 $Dat</p>
+    </div>
+
+    <!-- Module Orchestration -->
+    <script type="module">
+        import { init3DScene } from './render_3d.js';
+        
+        // Initialize the 3D workspace on page boot
+        window.addEventListener('DOMContentLoaded', () => {
+            init3DScene('canvas-container');
+            console.log("Quantara 3D Viewport successfully bound to DOM container.");
+        });
+    </script>
+</body>
+</html>
