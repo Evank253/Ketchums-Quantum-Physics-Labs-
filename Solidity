@@ -1,0 +1,67 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/**
+ * @title DatToken
+ * @dev Official Tokenomics Engine for Ketchums Quantum Physics Labs.
+ * Mints $Dat rewards based on verified QED scattering amplitudes.
+ */
+contract DatToken {
+    string public name = "Quantara Data Token";
+    string public symbol = "Dat";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
+
+    address public owner;
+
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event ThreatMitigated(address indexed securityNode, uint256 amplitudeBasisPoints, uint256 tokensMinted);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Quantara Engine: Only owner can execute");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    /**
+     * @notice Mints $Dat tokens directly to security nodes that mitigate cyber threats.
+     * @param securityNode The wallet address of the active 3D crawling bot node.
+     * @param amplitudeBasisPoints The calculated mathematical footprint from the QED engine.
+     */
+    function mintTokenReward(address securityNode, uint256 amplitudeBasisPoints) external onlyOwner returns (bool) {
+        require(securityNode != address(0), "Invalid node address");
+        require(amplitudeBasisPoints > 0, "No threat footprint detected");
+
+        // Scaling formula: 1 basis point of scattering amplitude = 100 base tokens
+        uint256 rewardAmount = amplitudeBasisPoints * 100 * (10 ** uint256(decimals));
+
+        totalSupply += rewardAmount;
+        balanceOf[securityNode] += rewardAmount;
+
+        emit Transfer(address(0), securityNode, rewardAmount);
+        emit ThreatMitigated(securityNode, amplitudeBasisPoints, rewardAmount);
+        
+        return true;
+    }
+
+    function transfer(address to, uint256 value) external returns (bool) {
+        require(balanceOf[msg.sender] >= value, "Insufficient $Dat balance");
+        balanceOf[msg.sender] -= value;
+        balanceOf[to] += value;
+        emit Transfer(msg.sender, to, value);
+        return true;
+    }
+
+    function approve(address spender, uint256 value) external returns (bool) {
+        allowance[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
+    }
+}
